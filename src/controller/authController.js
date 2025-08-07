@@ -62,7 +62,6 @@ exports.login = async (req, res) => {
       token,
     });
   } catch (error) {
-    console.error("Login error:", error);
     return res.status(500).json({
       success: false,
       message: "Internal server error",
@@ -72,9 +71,13 @@ exports.login = async (req, res) => {
 
 exports.logout = async (req, res) => {
   res.clearCookie("token");
-  res.json({
-    status: "Success",
-    message: "Logout success",
-  });
-  res.redirect("./login");
+
+  if (req.accepts("json")) {
+    return res.json({
+      status: "Success",
+      message: "Logout success",
+    });
+  }
+
+  return res.redirect("/login");
 };

@@ -7,6 +7,7 @@ const authMiddleware = require("./middlewares/authMiddleware");
 const authRoute = require("./routes/authRoute");
 const profileRoute = require("./routes/profileRoute");
 const connectionRouter = require("./routes/connectionRoute");
+const userRoute = require("./routes/user");
 require("dotenv").config();
 
 const app = express();
@@ -15,12 +16,11 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/", authRoute);
-
-//app.use("/", authRoute);
-
 app.use("/", authMiddleware, profileRoute);
-
-app.use("/request/send", authMiddleware, connectionRouter);
+app.use("/request", connectionRouter);
+app.use("/request", connectionRouter);
+app.use("/user", userRoute);
+app.use("/user/requests", userRoute);
 
 app.get("/userfeed", authMiddleware, async (req, res) => {
   const user = req.user;
