@@ -7,14 +7,11 @@ exports.receiveConnectionUser = async (req, res) => {
   const status = req.params.status;
   const allowedStatus = ["accepted", "cancelled"];
 
-  console.log("Received status:", status);
-
   if (!allowedStatus.includes(status.toLowerCase().trim())) {
     return res.status(400).json({
       message: "Invalid status: " + status,
     });
   }
-  console.log("Received status:", status);
 
   if (!mongoose.Types.ObjectId.isValid(receiver)) {
     return res.status(400).json({ error: "Invalid User ID Format" });
@@ -25,7 +22,6 @@ exports.receiveConnectionUser = async (req, res) => {
       recipient: receiver,
       status: "interested",
     });
-    console.log(userConnection);
 
     if (!userConnection) {
       return res.status(400).json({

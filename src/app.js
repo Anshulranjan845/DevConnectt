@@ -8,6 +8,7 @@ const authRoute = require("./routes/authRoute");
 const profileRoute = require("./routes/profileRoute");
 const connectionRouter = require("./routes/connectionRoute");
 const userRoute = require("./routes/user");
+const feedRoute = require("./routes/feedRoute");
 require("dotenv").config();
 
 const app = express();
@@ -22,20 +23,7 @@ app.use("/request", connectionRouter);
 app.use("/user", userRoute);
 app.use("/user/requests", userRoute);
 
-app.get("/userfeed", authMiddleware, async (req, res) => {
-  const user = req.user;
-  try {
-    const feed = await User.find({}).select("-password");
-    if (!feed) {
-      res.status(404).send("No data available");
-    } else {
-      res.send(feed);
-    }
-    console.log(user);
-  } catch (err) {
-    res.status(500).send("Server error");
-  }
-});
+app.use("/feed", authMiddleware, feedRoute);
 
 app.delete("/deleteuser", authMiddleware, async (req, res) => {
   const userdelete = req.body.userId;
